@@ -1,0 +1,2270 @@
+package oracle.apps.partnerMgmt.partnerCenter.publicUi.bean;
+
+
+import java.io.Serializable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
+import javax.el.ELContext;
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
+
+import oracle.adf.view.rich.component.fragment.UIXDeclarativeComponent;
+import oracle.adf.view.rich.component.rich.RichPopup;
+import oracle.adf.view.rich.component.rich.data.RichTable;
+import oracle.adf.view.rich.component.rich.data.RichTreeTable;
+import oracle.adf.view.rich.component.rich.input.RichInputText;
+import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
+import oracle.adf.view.rich.component.rich.nav.RichCommandImageLink;
+import oracle.adf.view.rich.component.rich.nav.RichCommandLink;
+import oracle.adf.view.rich.component.rich.output.RichOutputText;
+import oracle.adf.view.rich.context.AdfFacesContext;
+import oracle.adf.view.rich.event.PopupCanceledEvent;
+
+import oracle.apps.fnd.applcore.patterns.util.PatternsPublicUtil;
+
+
+import oracle.apps.partnerMgmt.partnerCenter.publicModel.PartnerSystemConstant;
+
+import oracle.jbo.Row;
+
+import org.apache.myfaces.trinidad.event.RowDisclosureEvent;
+import org.apache.myfaces.trinidad.event.SelectionEvent;
+import org.apache.myfaces.trinidad.model.ChildPropertyTreeModel;
+import org.apache.myfaces.trinidad.model.RowKeySet;
+import org.apache.myfaces.trinidad.model.TreeModel;
+
+
+public class DimensionShuttleBean implements Serializable
+{
+    private HashMap _managedComponents = new HashMap();
+
+
+
+    public DimensionShuttleBean()
+    {
+        super();
+
+    }
+
+    private DimShuttleComponent getManagedComponent()
+    {
+        UIXDeclarativeComponent declComp = DimensionComponentBaseBean.getOwnerDeclarativeComponent();
+        String hash = declComp.toString() + "~" + declComp.hashCode();
+
+        DimShuttleComponent dc = (DimShuttleComponent)_managedComponents.get(hash);
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+               ELContext elContext = facesContext.getELContext();
+               ExpressionFactory expressionFactory =
+                   facesContext.getApplication().getExpressionFactory();
+               ValueExpression exp =
+                   expressionFactory.createValueExpression(elContext, "#{dimensionShuttleBean}",
+                                                           Object.class);
+        if ( dc == null )
+        {
+            dc = new DimShuttleComponent();
+            //Fix for Bug 25370393 - failover error during session serialization: dimensionshuttlebean
+            //Setting dimensionshuttlebean to null as the _manageComponents is getting modified here
+
+
+
+            _managedComponents.put(hash, dc);
+            //Setting the dimensionshuttlebean after  _manageComponents  is modified
+
+
+        }
+        exp.setValue(elContext, this);
+        return dc;
+    }
+
+    public void setShuttlePopup(RichPopup popup)
+    {
+        if(popup!=null)
+        getManagedComponent().setShuttlePopup(popup);
+    }
+
+    public RichPopup getShuttlePopup()
+    {
+        return getManagedComponent().getShuttlePopup();
+    }
+
+    public void setTree(RichTreeTable tree)
+    {
+        if(tree !=  null)
+            getManagedComponent().setTree(tree);
+    }
+
+    public RichTreeTable getTree()
+    {
+        return getManagedComponent().getTree();
+    }
+
+    public void setTable(RichTable table)
+    {
+        if(table!=null)
+        getManagedComponent().setTable(table);
+    }
+
+    public RichTable getTable()
+    {
+        return getManagedComponent().getTable();
+    }
+
+    public void setFormattedOutput(RichOutputText formattedOutput)
+    {
+        if(formattedOutput!=null)
+        getManagedComponent().setFormattedOutput(formattedOutput);
+    }
+
+    public RichOutputText getFormattedOutput()
+    {
+        return getManagedComponent().getFormattedOutput();
+    }
+
+    public void setSearchInput(RichInputText searchInput)
+    {
+        if(searchInput!=null)
+        getManagedComponent().setSearchInput(searchInput);
+    }
+
+    public RichInputText getSearchInput()
+    {
+        return getManagedComponent().getSearchInput();
+    }
+
+    public void setClearSearchButton(RichCommandButton clearSearchButton)
+    {
+        if(clearSearchButton!=null)
+        getManagedComponent().setClearSearchButton(clearSearchButton);
+    }
+
+    public RichCommandButton getClearSearchButton()
+    {
+        return getManagedComponent().getClearSearchButton();
+    }
+
+    public void setSearchOutput(RichOutputText treeLabel)
+    {
+        if(treeLabel!=null)
+        getManagedComponent().setSearchOutput(treeLabel);
+    }
+
+    public RichOutputText getSearchOutput()
+    {
+        return getManagedComponent().getSearchOutput();
+    }
+
+    //--------------------------------For Classic----------------------------
+    public void setMoveAllImageLink(RichCommandImageLink moveAllImageLink)
+    {
+        if(moveAllImageLink!=null)
+        getManagedComponent().setMoveAllImageLink(moveAllImageLink);
+    }
+
+    public RichCommandImageLink getMoveAllImageLink()
+    {
+        return getManagedComponent().getMoveAllImageLink();
+    }
+
+    public void setRemoveAllImageLink(RichCommandImageLink removeAllImageLink)
+    {
+        if(removeAllImageLink!=null)
+        getManagedComponent().setRemoveAllImageLink(removeAllImageLink);
+    }
+
+    public RichCommandImageLink getRemoveAllImageLink()
+    {
+        return getManagedComponent().getRemoveAllImageLink();
+    }
+
+    public void setMoveImageLink(RichCommandImageLink moveImageLink)
+    {
+        if(moveImageLink!=null)
+        getManagedComponent().setMoveImageLink(moveImageLink);
+    }
+
+    public RichCommandImageLink getMoveImageLink()
+    {
+        return getManagedComponent().getMoveImageLink();
+    }
+
+    public void setRemoveImageLink(RichCommandImageLink removeImageLink)
+    {
+        if(removeImageLink!=null)
+        getManagedComponent().setRemoveImageLink(removeImageLink);
+    }
+
+    /**
+     * @return
+     */
+    public RichCommandImageLink getRemoveImageLink()
+    {
+        return getManagedComponent().getRemoveImageLink();
+    }
+
+
+
+    //-------------------------------- For FUSE--------------------------------------------------------
+
+    public void setMoveAllButton(RichCommandButton moveAllButton)
+    {
+        if(moveAllButton!=null)
+        getManagedComponent().setMoveAllButton(moveAllButton);
+    }
+
+    public RichCommandButton getMoveAllButton()
+    {
+        return getManagedComponent().getMoveAllButton();
+    }
+
+    public void setRemoveAllButton(RichCommandButton removeAllButton)
+    {
+        if(removeAllButton!=null)
+        getManagedComponent().setRemoveAllButton(removeAllButton);
+    }
+
+    public RichCommandButton getRemoveAllButton()
+    {
+        return getManagedComponent().getRemoveAllButton();
+    }
+
+    public void setMoveButton(RichCommandButton moveButton)
+    {
+        if(moveButton!=null)
+        getManagedComponent().setMoveButton(moveButton);
+    }
+
+    public RichCommandButton getMoveButton()
+    {
+        return getManagedComponent().getMoveButton();
+    }
+
+    public void setRemoveButton(RichCommandButton removeButton)
+    {
+        if(removeButton!=null)
+        getManagedComponent().setRemoveButton(removeButton);
+    }
+
+    /**
+     * @return
+     */
+    public RichCommandButton getRemoveButton()
+    {
+        return getManagedComponent().getRemoveButton();
+    }
+
+    public TreeModel getAllDimMembers()
+    {
+        return getManagedComponent().getAllDimMembers();
+    }
+
+    public void nodeExpandCollapse(RowDisclosureEvent event)
+    {
+        getManagedComponent().nodeExpandCollapse(event);
+    }
+
+    public void nodeSelect(SelectionEvent event)
+    {
+        getManagedComponent().nodeSelect(event);
+    }
+
+    public void rowSelect(SelectionEvent event)
+    {
+        getManagedComponent().rowSelect(event);
+    }
+
+    public boolean getNothingToMove()
+    {
+        return getManagedComponent().getNothingToMove();
+    }
+
+    public boolean getNothingToRemove()
+    {
+        return getManagedComponent().getNothingToRemove();
+    }
+
+
+    public boolean getNothingToMoveAll()
+    {
+        return getManagedComponent().getNothingToMoveAll();
+    }
+
+    public boolean getNothingToRemoveAll()
+    {
+        return getManagedComponent().getNothingToRemoveAll();
+    }
+
+    public List getSelectedDimMembers()
+    {
+        return getManagedComponent().getSelectedDimMembers();
+    }
+
+    public String getFormattedSelectedDimMembers()
+    {
+        return getManagedComponent().getFormattedSelectedDimMembers();
+    }
+
+    // START: Bug 19687282: MVG
+    public String getFirstSelectedDimMember() {
+        // Bug 22062854: Initialize tree and refresh data if First member needs to be evaluated(E.g: Profile tab)
+        if(isFirstDimExpanded() ||
+                                       getManagedComponent()._shuttleExpanded)
+                   {
+                   getManagedComponent().initializeTableFromTransaction();
+
+                   getManagedComponent().refreshUIFromData(true);
+                   }
+               else
+                   return "";
+
+        if(getSelectedDimMembers()!=null && getSelectedDimMembersSize()>0)
+            return getSelectedDimMembers().get(0).toString();
+        else
+            return "";
+    }
+
+    public int getSelectedDimMembersSize(){
+        //Bug 22062854:  Avoid VO query -> from getSelectedDimMembers() if launched from create flow
+        if(!isFirstDimExpanded() &&
+                                !getManagedComponent()._shuttleExpanded)
+           return 0;
+        else if(getSelectedDimMembers()!=null)
+            return getManagedComponent().getSelectedDimMembers().size();
+        else
+            return 0;
+    }
+
+    /**
+     * Return true if Geographies List size is more than 1 .
+     * @return
+     */
+    public boolean getMoreDimFlag(){
+        boolean hasMoreFlag=false;
+        //Bug 22062854:  Avoid VO query -> from getSelectedDimMembers()
+        if(!isFirstDimExpanded()  &&
+                                !getManagedComponent()._shuttleExpanded)
+            return hasMoreFlag;
+        if(getSelectedDimMembers()!=null){
+            if(getSelectedDimMembersSize()>1){
+                hasMoreFlag =  true;
+            }
+        }
+             return hasMoreFlag;
+    }
+
+
+    public void setMoreCommandLink(RichCommandLink moreCommandLink) {
+        if(moreCommandLink!=null)
+        this.getManagedComponent().setMoreCommandLink(moreCommandLink);
+    }
+
+    public RichCommandLink getMoreCommandLink() {
+        return getManagedComponent().getMoreCommandLink();
+    }
+
+
+
+    // END: Bug 19687282
+
+    public void changeSearchListener(ValueChangeEvent event)
+    {
+        getManagedComponent().changeSearchListener(event);
+    }
+
+    public void onClearSearchClick(ActionEvent event)
+    {
+        getManagedComponent().onClearSearchClick(event);
+    }
+
+    public boolean getIsSearching()
+    {
+        return getManagedComponent().getIsSearching();
+    }
+
+    public String getSearchText()
+    {
+        return getManagedComponent().getSearchText();
+    }
+
+    public String getSearchTextTruncated()
+    {
+        return getManagedComponent().getSearchTextTruncated();
+    }
+
+    public void onMoveCommandClick(ActionEvent event)
+    {
+        getManagedComponent().onMoveCommandClick(event);
+    }
+
+    public void onMoveAllCommandClick(ActionEvent event)
+    {
+        getManagedComponent().onMoveAllCommandClick(event);
+    }
+
+    public void onRemoveCommandClick(ActionEvent event)
+    {
+        getManagedComponent().onRemoveCommandClick(event);
+    }
+
+    public void onRemoveAllCommandClick(ActionEvent event)
+    {
+        getManagedComponent().onRemoveAllCommandClick(event);
+    }
+
+    public void clearAll()
+    {
+        getManagedComponent().clearAll();
+    }
+
+    public void onDialogOpen(ActionEvent event)
+    {
+        getManagedComponent().onDialogOpen(event);
+    }
+
+    public void onDialogClose(PopupCanceledEvent event)
+    {
+        getManagedComponent().onDialogClose(event);
+    }
+
+    public void onOKClick(ActionEvent event)
+    {
+        getManagedComponent().onOKClick(event);
+    }
+
+    public void onCancelClick(ActionEvent event)
+    {
+        getManagedComponent().onCancelClick(event);
+    }
+
+    public boolean isFirstDimExpanded() {
+        //Bug 22062854:  Expression to determine if first dim member is expanded on load or deferred
+        return (!AdfFacesContext.getCurrentInstance().getPageFlowScope().containsKey("NewPartnerMap"))
+                                                 || AdfFacesContext.getCurrentInstance().getPageFlowScope().containsKey("ZpmFuseEditPartnerDetailsBean");
+    }
+
+
+
+    private static class DimShuttleComponent extends DimensionComponentBaseBean implements Serializable
+    {
+        transient private RichOutputText _formattedOutput = null;
+
+        transient private RichPopup _shuttlePopup = null;
+
+        transient private RichInputText _searchInput = null;
+        transient private RichCommandButton _clearSearchButton = null;
+        transient private RichOutputText _searchOutput = null;
+        private Boolean _searching = false;
+        private String _searchText = null;
+
+        transient private RichCommandImageLink _moveImageLink = null;
+        transient private RichCommandImageLink _removeImageLink = null;
+
+        transient private RichCommandImageLink _moveAllImageLink = null;
+        transient private RichCommandImageLink _removeAllImageLink = null;
+
+        transient private RichCommandButton _moveButton = null;
+        transient private RichCommandButton _removeButton = null;
+
+        transient private RichCommandButton _moveAllButton = null;
+        transient private RichCommandButton _removeAllButton = null;
+
+        transient private RichTreeTable _tree = null;
+        transient private DimMember _treeRoot = null;
+        transient private TreeModel _treeModel = null;
+        private boolean _treeModelChanged = false;
+
+        transient private RichTable _table = null;
+        transient private DimMember _tableRoot = null;
+        private transient RichCommandLink _moreCommandLink = null;
+
+        //Bug 22062854:  Componenet level shuttle expansion flag - To defer SQL query on the Dimension VO
+        private boolean _shuttleExpanded = false;
+
+        public DimShuttleComponent()
+        {
+            super();
+            //Bug 22062854:  initialization deferred to when the 'Expand' icon is clicked
+
+        }
+
+        public void setShuttlePopup(RichPopup popup)
+        {
+            _shuttlePopup = popup;
+        }
+
+        public RichPopup getShuttlePopup()
+        {
+            return _shuttlePopup;
+        }
+
+
+/* This method returns a List of the Dimension member tree nodes, which are currently shown as disclosed/expanded in  the dimension shuttle.
+ * This method is used in Fuse for remembering the Dimension Members, which are expanded and rendering them again, as expanded,
+ * if tree nodes get added/removed from the tree model.
+ *
+ */
+        public List<DimMember> getDisclosedDimMembers() {
+            List<DimMember> disclosedTreeNodes = new ArrayList<DimMember>();
+
+            RowKeySet disclosedRowKeys = _tree.getDisclosedRowKeys();
+            RowKeySet expandedTreeNodes = disclosedRowKeys.clone();
+
+            if (expandedTreeNodes != null) {
+                Iterator iter = expandedTreeNodes.iterator();
+                while (iter.hasNext()) {
+                    DimMember parent = _treeRoot;
+                    List<Integer> nodeIndices = (List<Integer>)iter.next();
+
+                    for (Integer i : nodeIndices) {
+                        int countOfChildren = parent.getChildren().size();
+
+                        //Try to expand the tree node, if for some reason, the count of chidren, is less than the index of the child, that we are looking for.
+                        if (i >= countOfChildren){
+                            populateTreeChildren(parent, false);
+                        }
+
+                        countOfChildren = parent.getChildren().size();
+
+                        if (i < countOfChildren){
+                            parent = parent.getChildren().get(i);
+                        }
+                    }
+                    disclosedTreeNodes.add(parent);
+                }
+            }
+            return disclosedTreeNodes;
+        }
+
+/*
+ * This method traverses the tree and returns the index/position of a dimension member from the tree root.
+ * This methd is used mainly in Fuse.
+ * When tree nodes get removed/added to the tree model, the disclosedRowKeys() property goes out-of-sync.
+ * Since, we manually remove/add tree nodes to the tree, we will have to traverse the tree andre-calculate the right index for the disclosed tree nodes.
+ * getRowKeyListForDimMember() API is a helper method, which helps in this purpose.
+ */
+        public List<Integer> getRowKeyListForDimMember(DimMember treeRoot,
+                                                       DimMember m) {
+
+            List<Integer> rowKeyList = new ArrayList<Integer>();
+            List<Integer> childRowKeyList = new ArrayList<Integer>();
+
+            boolean _found = false;
+            int index = 0;
+
+            if (treeRoot == null) {
+                treeRoot = _treeRoot;
+            }
+
+            List<DimMember> childNodes = treeRoot.getChildren();
+
+            if (childNodes != null && childNodes.size() > 0) {
+                for (int i = 0; i < childNodes.size(); i++) {
+                    DimMember childNode = childNodes.get(i);
+                    if (m.equals(childNode)) {
+                        index = i;
+                        _found = true;
+                        break;
+                    }
+                }
+
+                if (_found) {
+                    rowKeyList.add(index);
+                    return rowKeyList;
+                }
+
+                for (int i = 0; i < childNodes.size(); i++) {
+                    DimMember childNode = childNodes.get(i);
+                    childRowKeyList = getRowKeyListForDimMember(childNode, m);
+                    if (childRowKeyList.size() > 0) {
+                        _found = true;
+                        index = i;
+                        break;
+                    }
+                }
+
+                if (_found) {
+                    rowKeyList.add(index);
+                    for (int i : childRowKeyList) {
+                        rowKeyList.add(i);
+                    }
+                    return rowKeyList;
+                }
+            }
+            return rowKeyList;
+        }
+
+        public void setTree(RichTreeTable tree)
+        {
+            _tree = tree;
+
+        }
+
+        public RichTreeTable getTree()
+        {
+                //Bug 22062854:  If Shuttle is being expanded - and the tree model is null [ First drilldown ] - only then call the initialize APIs [FUSE]
+            if(SIMPLIFIED_UI.equals(getComponentAttributeString(ATTRIBUTE_UI_TYPE)) &&  _tree == null && _shuttleExpanded==true
+                //Bug 22062854:  OR If it is classic and tree is null
+                || (!SIMPLIFIED_UI.equals(getComponentAttributeString(ATTRIBUTE_UI_TYPE)) && _tree == null))
+            {
+                initializeTableFromTransaction();
+                initializeTreeRoot();
+            }
+            //Bug 22062854:  Other cases - viz a viz - subsequent drilldowns - just return the existing tree
+            return _tree;
+        }
+
+        public void setTable(RichTable table)
+        {
+            _table = table;
+        }
+
+        public RichTable getTable()
+        {
+            return _table;
+        }
+
+        public void setFormattedOutput(RichOutputText formattedOutput)
+        {
+            _formattedOutput = formattedOutput;
+        }
+
+        public RichOutputText getFormattedOutput()
+        {
+            return _formattedOutput;
+        }
+
+        public void setSearchInput(RichInputText searchInput)
+        {
+            _searchInput = searchInput;
+        }
+
+        public RichInputText getSearchInput()
+        {
+            return _searchInput;
+        }
+
+        public void setClearSearchButton(RichCommandButton clearSearchButton)
+        {
+            _clearSearchButton = clearSearchButton;
+        }
+
+        public RichCommandButton getClearSearchButton()
+        {
+            return _clearSearchButton;
+        }
+
+        public void setSearchOutput(RichOutputText searchOutput)
+        {
+            _searchOutput = searchOutput;
+        }
+
+        public RichOutputText getSearchOutput()
+        {
+            return _searchOutput;
+        }
+
+        //-----------------------     For Classic  ----------------------------
+        public void setMoveAllImageLink(RichCommandImageLink moveAllImageLink) {
+            _moveAllImageLink = moveAllImageLink;
+        }
+
+        public RichCommandImageLink getMoveAllImageLink() {
+            return _moveAllImageLink;
+        }
+
+        public void setRemoveAllImageLink(RichCommandImageLink removeAllImageLink) {
+            _removeAllImageLink = removeAllImageLink;
+        }
+
+        public RichCommandImageLink getRemoveAllImageLink() {
+            return _removeAllImageLink;
+        }
+
+        public void setMoveImageLink(RichCommandImageLink moveImageLink)
+        {
+            _moveImageLink = moveImageLink;
+        }
+
+        public RichCommandImageLink getMoveImageLink()
+        {
+            return _moveImageLink;
+        }
+
+        public void setRemoveImageLink(RichCommandImageLink removeImageLink)
+        {
+            _removeImageLink = removeImageLink;
+        }
+
+        public RichCommandImageLink getRemoveImageLink()
+        {
+            return _removeImageLink;
+        }
+
+        //-------------------------------- For FUSE---------------------------------------------------------------
+        public void setMoveAllButton(RichCommandButton moveAllButton) {
+            _moveAllButton = moveAllButton;
+        }
+
+        public RichCommandButton getMoveAllButton() {
+            return _moveAllButton;
+        }
+
+        public void setRemoveAllButton(RichCommandButton removeAllButton) {
+            _removeAllButton = removeAllButton;
+        }
+
+        public RichCommandButton getRemoveAllButton() {
+            return _removeAllButton;
+        }
+
+        public void setMoveButton(RichCommandButton moveButton)
+        {
+            _moveButton = moveButton;
+        }
+
+        public RichCommandButton getMoveButton()
+        {
+            return _moveButton;
+        }
+
+        public void setRemoveButton(RichCommandButton removeButton)
+        {
+            _removeButton = removeButton;
+        }
+
+        public RichCommandButton getRemoveButton()
+        {
+            return _removeButton;
+        }
+
+        public TreeModel getAllDimMembers()
+        {
+            //Bug 22062854: Added check to see if shuttle is expanded
+            if ( _shuttleExpanded &&  (_treeModel == null || _treeModelChanged == true) && _treeRoot!=null )
+            {
+                    _treeModelChanged = false;
+                    _treeModel = new ChildPropertyTreeModel(_treeRoot.getChildren(), "children");
+                    _treeModelChanged = false;
+                }
+
+            return _treeModel;
+        }
+
+        public void nodeExpandCollapse(RowDisclosureEvent event)
+        {
+            populateDataForExpandedTreeNodes( event.getAddedSet() );
+        }
+
+        private void addSelectedNodeBackToTreeModel(DimMember selectedNode) {
+            if(PartnerSystemConstant.PARTNER_GEO_DIMENSION_CODE.equals(selectedNode.getDimSubtypeCode())){
+                addSelectedGeographiesBackToTreeModel(selectedNode);
+            }else{
+                    addSelectedDimMemberBackToTreeModel(selectedNode);
+
+                }
+
+        }
+
+
+        private void addSelectedGeographiesBackToTreeModel(DimMember selectedNode){
+                if (selectedNode != null) {
+                    Long geographyId = selectedNode.getMemberId();
+
+                    Row parentGeographyRow =
+                       getApplicationModule().getGeographyRowByGeographyId(geographyId);
+
+                    Long parentGeographyId = null;
+                    DimMember parentNode = null;
+
+                    if (parentGeographyRow != null) {
+                        parentGeographyId =
+                                (Long)parentGeographyRow.getAttribute("GeographyId");
+
+                        if (!parentGeographyId.equals(_treeRoot.getMemberId())) {
+                            parentNode = new DimMember(parentGeographyRow);
+                        } else {
+                            parentNode = _treeRoot;
+                        }
+                    } else {
+                        parentNode = _treeRoot;
+                    }
+
+                    DimMember parentNodeReferenceInTree =
+                        findDimMemberInTree(_treeRoot, parentNode);
+
+                    if (parentNodeReferenceInTree != null) {
+                        parentNodeReferenceInTree.getChildren().clear();
+                        parentNodeReferenceInTree.setChildrenPopulated(false);
+
+                        populateTreeChildren(parentNodeReferenceInTree, false);
+                    }
+
+                    _treeModelChanged = true;
+                }
+            }
+
+        private void addSelectedDimMemberBackToTreeModel(DimMember selectedNode){
+                if (selectedNode != null) {
+                    Long dimMemberId = selectedNode.getMemberId();
+
+                    Row parentDimMemberRow =
+                        getApplicationModule().getParentDimMemberRow(dimMemberId);
+
+                    Long parentTerrDimMemberId = null;
+                    DimMember parentNode = null;
+
+                    if (parentDimMemberRow != null) {
+                        parentTerrDimMemberId =
+                                (Long)parentDimMemberRow.getAttribute("TerrDimMemberId");
+
+                        if (!parentTerrDimMemberId.equals(_treeRoot.getMemberId())) {
+                            parentNode = new DimMember(parentDimMemberRow);
+                        } else {
+                            parentNode = _treeRoot;
+                        }
+                    } else {
+                        parentNode = _treeRoot;
+                    }
+
+                    DimMember parentNodeReferenceInTree =
+                        findDimMemberInTree(_treeRoot, parentNode);
+
+                    if (parentNodeReferenceInTree != null) {
+                        parentNodeReferenceInTree.getChildren().clear();
+                        parentNodeReferenceInTree.setChildrenPopulated(false);
+
+                        populateTreeChildren(parentNodeReferenceInTree, false);
+                    }
+
+                    _treeModelChanged = true;
+                }
+            }
+
+        private void removeSelectedNodeFromTreeModel(DimMember selectedNode) {
+            DimMember parentNode =
+                findDimMembersParentInTree(_treeRoot, selectedNode);
+            parentNode.getChildren().remove(selectedNode);
+            _treeModelChanged = true;
+        }
+
+        private void populateDataForExpandedTreeNodes(RowKeySet expandedNodes) {
+            String uiType = getComponentAttributeString(ATTRIBUTE_UI_TYPE);
+
+
+
+            if (SIMPLIFIED_UI.equals(uiType)) {
+                if (expandedNodes != null) {
+                    Iterator iter = expandedNodes.iterator();
+                    while (iter.hasNext()) {
+                        DimMember parent = _treeRoot;
+                        List<Integer> nodeIndices = (List<Integer>)iter.next();
+                        for (Integer i : nodeIndices) {
+                            // Expand the tree, when the disclosedRowKeys contains a reference to a tree node, which is not expanded, yet.
+                            if (i >= parent.getChildren().size()) {
+                                populateTreeChildren(parent, false);
+                            }
+
+                            if (i < parent.getChildren().size()) {
+                                parent = parent.getChildren().get(i);
+                            }
+                        }
+                        // No need to expand and fetch the grand-children of the node, being currently expanded.
+                        populateTreeChildren(parent, false);
+                    }
+                }
+            } else {
+                if ( expandedNodes != null )
+                {
+                    Iterator iter = expandedNodes.iterator();
+                    while ( iter.hasNext() )
+                    {
+                        DimMember parent = _treeRoot;
+                        List<Integer> nodeIndices = (List<Integer>)iter.next();
+                        for ( Integer i : nodeIndices )
+                        {
+                            parent = parent.getChildren().get(i);
+                        }
+                        // No need to expand and fetch the grand-children of the node, being currently expanded.
+                        populateTreeChildren(parent,false);
+                    }
+                }
+            }
+        }
+
+        public void nodeSelect(SelectionEvent event)
+        {
+            if (event==null) return;
+
+            refreshUIComponent(_moveImageLink);
+            refreshUIComponent(_moveAllImageLink);
+            refreshUIComponent(_moveButton);
+            refreshUIComponent(_moveAllButton);
+        }
+
+        public void rowSelect(SelectionEvent event)
+        {
+            if (event==null) return;
+
+            refreshUIComponent(_removeImageLink);
+            refreshUIComponent(_removeAllImageLink);
+            refreshUIComponent(_removeButton);
+            refreshUIComponent(_removeAllButton);
+        }
+
+        public boolean getNothingToMove()
+        {
+            RowKeySet rks = _tree.getSelectedRowKeys();
+            if ( rks == null || rks.size() == 0 ) return true;
+
+            boolean nothingToMove = true;
+            Iterator iterSelected = rks.iterator();
+            while ( iterSelected.hasNext() )
+            {
+                DimMember m = _treeRoot;
+                List<Integer> nodeIndices = (List<Integer>)iterSelected.next();
+                for ( Integer i : nodeIndices )
+                {
+                    m = m.getChildren().get(i);
+                }
+
+                if ( m.getSelected() == false && m.getParentSelected() == false )
+                {
+                    nothingToMove = false;
+                    break;
+                }
+            }
+            return nothingToMove;
+        }
+
+	/* Helper method used for determining, whether the 'Remove All' button is to be shown disabled or not.
+	 */
+        public boolean getNothingToRemoveAll() {
+            if (_tableRoot != null && _tableRoot.getChildren() != null &&
+                (_tableRoot.getChildren().size() > 0)) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+	/* Helper method used for determining, whether the 'Move All' button is to be shown disabled or not.
+	 */
+        public boolean getNothingToMoveAll() {
+            if (_treeRoot != null && _treeRoot.getChildren() != null &&
+                (_treeRoot.getChildren().size() > 0)) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        public boolean getNothingToRemove()
+        {
+            // Bug 22062854: Corner case: Move back all will throw NPE if table is empty
+            if(_table == null)
+                return true;
+            RowKeySet rks = _table.getSelectedRowKeys();
+            if ( rks == null || rks.size() == 0 ) return true;
+
+            return false;
+        }
+
+        public List getSelectedDimMembers()
+        {
+            if(_tableRoot!=null){
+                    return _tableRoot.getChildren();
+                }
+          else  return null;
+        }
+
+        public String getFormattedSelectedDimMembers()
+        {
+            String formatted = "";
+            //Bug 22062854:  initialize for classic UI component to render the shuttle
+            initializeTableFromTransaction();
+            for ( DimMember m : _tableRoot.getChildren() )
+            {
+                if ( formatted.length() > 0 ) formatted += ";";
+                formatted += m.getName();
+            }
+
+            return formatted;
+        }
+
+        public void onClearSearchClick(ActionEvent event)
+        {
+            if (event==null) return;
+
+            clearSearch();
+        }
+
+        private void clearSearch()
+        {
+            _searching = false;
+            initializeTreeRoot();
+            refreshUIComponent(_tree);
+            refreshUIComponent(_moveImageLink);
+            refreshUIComponent(_moveAllImageLink);
+            refreshUIComponent(_moveButton);
+            refreshUIComponent(_moveAllButton);
+            refreshUIComponent(_clearSearchButton);
+            refreshUIComponent(_searchOutput);
+
+            _searchInput.setValue(null);
+            refreshUIComponent(_searchInput);
+        }
+
+        public void changeSearchListener(ValueChangeEvent event)
+        {
+            if (event==null) return;
+
+            String search = (String)_searchInput.getValue();
+            search = search.trim();
+            if ( search == null || search.length() == 0 )
+            {
+                clearSearch();
+                return;
+            }
+
+            _searching = true;
+            _searchText = search.toUpperCase();
+            _treeRoot = new DimMember();
+            _treeModelChanged = true;
+
+            List<Row> members = getApplicationModule().searchDimMembers(
+                                            getComponentAttributeString(ATTRIBUTE_DIMENSION_CODE),
+                                            search );
+
+            String uiType = getComponentAttributeString(ATTRIBUTE_UI_TYPE);
+
+            if ( members != null )
+            {
+                Iterator<Row> iter = members.iterator();
+                while ( iter.hasNext() )
+                {
+                    Row r = iter.next();
+                    if ( r != null )
+                    {
+                        DimMember m = new DimMember(r);
+
+                        //Fix for Bug 19244967 - rel9.2 search is returning result for record moved to rhs in fuse dimension shuttle
+            /*  Commented out the code to improve the performance as per the bug #31066971
+             * if (SIMPLIFIED_UI.equals(uiType)) {
+                            // If the dimension member already exists on the RHS (Selected side of the dimension shuttle), then
+                            // we should skip adding this dimension member to the tree model.
+                            if (_tableRoot.getChildren().contains(m)) {
+                               continue;
+                            }
+                            // If the parent of a dimension member, already exists on the RHS (Selected side of the dimension shuttle), then
+                            // we should skip adding this dimension member to the tree model.
+                            boolean parentOfDimMemberAlreadyExistsInSelectedDimMemberList = false;
+                            for (DimMember parent : _tableRoot.getChildren()){
+                               boolean result = isDimMemberChildOf(m, parent);
+                                if (result == true){
+                                    parentOfDimMemberAlreadyExistsInSelectedDimMemberList = true;
+                                    break;
+                                }
+                            }
+
+                            if (parentOfDimMemberAlreadyExistsInSelectedDimMemberList){
+                                continue;
+                            }
+                        } */
+
+                        _treeRoot.getChildren().add(m);
+                        //Commented out the code to improve the performance as per the bug #31066971
+                        //resolveAddedMember(m);
+
+                        populateTreeChildren(m,false);
+                    }
+                }
+            }
+
+            clearTreeSelection();
+            clearTreeExpansion();
+            refreshUIComponent(_tree);
+            refreshUIComponent(_moveImageLink);
+            refreshUIComponent(_moveAllImageLink);
+            refreshUIComponent(_moveButton);
+            refreshUIComponent(_moveAllButton);
+            refreshUIComponent(_clearSearchButton);
+            refreshUIComponent(_searchOutput);
+        }
+
+        public boolean getIsSearching()
+        {
+            return _searching;
+        }
+
+        public String getSearchText()
+        {
+            return _searchText;
+        }
+
+        public String getSearchTextTruncated()
+        {
+            String truncated = _searchText;
+            if ( truncated != null && truncated.length() > 12 )
+            {
+                truncated = truncated.substring(0, 12);
+                truncated += "...";
+            }
+            return truncated;
+        }
+
+        public void onMoveAllCommandClick(ActionEvent event) {
+
+            String uiType = getComponentAttributeString(ATTRIBUTE_UI_TYPE);
+
+            if (SIMPLIFIED_UI.equals(uiType)) {
+                if (event == null)
+                    return;
+
+                _treeRoot.unselectAll();
+
+                int countOfChildren = _treeRoot.getChildren().size();
+
+                for (int index = 0; index < countOfChildren; index++) {
+                    DimMember node = _treeRoot.getChildren().get(0);
+                    moveMemberAndValidate(node);
+                }
+
+                //Bug# 18023873:-No need to synchronize the selection state here. It will be done inside moveMemberAndValidate() method.
+                clearTreeSelection();
+                clearTableSelection();
+                refreshUIFromData(false);
+            } else {
+                if (event == null)
+                    return;
+
+                _treeRoot.unselectAll();
+
+                ListIterator<DimMember> iterList =
+                    _treeRoot.getChildren().listIterator();
+                while (iterList.hasNext()) {
+                    DimMember node = iterList.next();
+                    moveMemberAndValidate(node);
+                }
+
+                //Bug# 18023873:-No need to synchronize the selection state here. It will be done inside moveMemberAndValidate() method.
+                clearTreeSelection();
+                clearTableSelection();
+                refreshUIFromData(false);
+            }
+        }
+
+        private void setDimMembersParentAsSelected(DimMember node) {
+            if (node == null)
+                return;
+
+            node.setParentSelected(true);
+
+            ListIterator<DimMember> iter2 = node.getChildren().listIterator();
+            while (iter2.hasNext()) {
+                DimMember child = iter2.next();
+                setDimMembersParentAsSelected(child);
+            }
+        }
+/* Commented out the code to improve the performance as per the bug #31066971
+        public void onMoveCommandClick(ActionEvent event) {
+
+            String uiType = getComponentAttributeString(ATTRIBUTE_UI_TYPE);
+
+            if (SIMPLIFIED_UI.equals(uiType)) {
+
+                if (event == null)
+                    return;
+
+                RowKeySet selectedNodes = _tree.getSelectedRowKeys();
+                if (selectedNodes == null)
+                    return;
+
+                List<DimMember> expandedTreeNodes = getDisclosedDimMembers();
+                List<DimMember> treeNodesSelectedForProcessing =
+                    new ArrayList<DimMember>();
+
+                Iterator iterSelected = selectedNodes.iterator();
+                while (iterSelected.hasNext()) {
+                    DimMember m = _treeRoot;
+                    List<Integer> nodeIndices =
+                        (List<Integer>)iterSelected.next();
+                    for (Integer i : nodeIndices) {
+                        m = m.getChildren().get(i);
+                    }
+                    treeNodesSelectedForProcessing.add(m);
+                }
+
+                for (DimMember m : treeNodesSelectedForProcessing) {
+
+                    if (m.getSelected() == false &&
+                        m.getParentSelected() == false) {
+                        moveMemberAndValidate(m);
+                    }
+                }
+
+                HashMap<DimMember, List> rowKeyLists = getRowKeyListForDisclosedNodes(expandedTreeNodes);
+                regenerateDisclosedRowKeys(expandedTreeNodes, rowKeyLists);
+                populateDataForExpandedTreeNodes(_tree.getDisclosedRowKeys());
+
+                //Bug# 18023873:- No need to synchronize the selection state here. moveMemberAndValidate() would have already taken care of it.
+                clearTreeSelection();
+                refreshUIFromData(false);
+            } else {
+                if (event==null) return;
+
+                RowKeySet selectedNodes = _tree.getSelectedRowKeys();
+                if ( selectedNodes == null ) return;
+
+                Iterator iterSelected = selectedNodes.iterator();
+                while ( iterSelected.hasNext() )
+                {
+                    DimMember m = _treeRoot;
+                    List<Integer> nodeIndices = (List<Integer>)iterSelected.next();
+                    for ( Integer i : nodeIndices )
+                    {
+                        m = m.getChildren().get(i);
+                    }
+
+                    if ( m.getSelected() == false && m.getParentSelected() == false )
+                    {
+                        moveMemberAndValidate(m);
+                    }
+                }
+
+                 //Bug# 18023873:- No need to synchronize the selection state here. moveMemberAndValidate() would have already taken care of it.
+                clearTreeSelection();
+                refreshUIFromData(false);
+            }
+        }
+*/
+
+        public void onMoveCommandClick(ActionEvent event) {
+            String uiType = getComponentAttributeString(ATTRIBUTE_UI_TYPE);
+            if (SIMPLIFIED_UI.equals(uiType)) {
+                if (event == null) return;
+                RowKeySet selectedNodes = _tree.getSelectedRowKeys();
+                if (selectedNodes == null)
+                    return;
+                List<DimMember> treeNodesSelectedForProcessing = new ArrayList<DimMember>();
+                Iterator iterSelected = selectedNodes.iterator();
+                while (iterSelected.hasNext()) {
+                    DimMember m = _treeRoot;
+                    List<Integer> nodeIndices =
+                        (List<Integer>)iterSelected.next();
+                    for (Integer i : nodeIndices) {
+                        m = m.getChildren().get(i);
+                    }
+                    treeNodesSelectedForProcessing.add(m);
+                }
+
+                for (DimMember m : treeNodesSelectedForProcessing) {
+                    moveMemberAndValidate(m);
+                }
+                clearTreeSelection();
+                refreshUIFromData(false);
+            }
+        }
+
+        public HashMap<DimMember, List> getRowKeyListForDisclosedNodes(List<DimMember> expandedTreeNodes){
+            HashMap<DimMember, List> rowKeyLists = new HashMap<DimMember, List>();
+            for (DimMember m : expandedTreeNodes){
+                List rowKeyList = getRowKeyListForDimMember(_treeRoot, m);
+                rowKeyLists.put(m, rowKeyList);
+            }
+            return rowKeyLists;
+        }
+
+/*
+        public void onRemoveAllCommandClick(ActionEvent event) {
+
+            String uiType = getComponentAttributeString(ATTRIBUTE_UI_TYPE);
+            if (SIMPLIFIED_UI.equals(uiType)) {
+                if (event == null)
+                    return;
+
+                int countOfChildren = _tableRoot.getChildren().size();
+
+                if (_treeRoot.getChildren().size() == 0) {
+                    _tableRoot.getChildren().clear();
+                    initializeTreeRoot();
+                    clearTreeExpansion();
+                } else {
+                    List<DimMember> expandedTreeNodes =
+                        getDisclosedDimMembers();
+
+                    for (int index = 0; index < countOfChildren; index++) {
+                        DimMember m = _tableRoot.getChildren().get(0);
+                        _tableRoot.getChildren().remove(m);
+
+                        // Add the selected tree nodes(which are being removed from the right side of the shuttle) back to the Tree Model, in case of Fuse Dim Shuttle.
+                        //addSelectedNodeBackToTreeModel(m);
+                    }
+                    HashMap<DimMember, List> rowKeyLists =
+                        getRowKeyListForDisclosedNodes(expandedTreeNodes);
+
+                    regenerateDisclosedRowKeys(expandedTreeNodes, rowKeyLists);
+                    populateDataForExpandedTreeNodes(_tree.getDisclosedRowKeys());
+
+                }
+
+                _treeRoot.unselectAll();
+
+                clearTableSelection();
+                refreshUIFromData(false);
+            } else {
+                if (event == null)
+                    return;
+
+                _tableRoot.getChildren().clear();
+                _treeRoot.unselectAll();
+
+                clearTableSelection();
+                refreshUIFromData(false);
+            }
+        }*/
+
+        public void onRemoveAllCommandClick(ActionEvent event) {
+
+                if (event == null)
+                    return;
+                _tableRoot.getChildren().clear();
+                _treeRoot.unselectAll();
+                clearTableSelection();
+                refreshUIFromData(false);
+        }
+
+
+        public void clearAll()
+        {
+            _tableRoot.getChildren().clear();
+            _treeRoot.unselectAll();
+
+            clearTableSelection();
+            refreshUIFromData(true);
+
+            saveTableDataToTransaction();
+        }
+
+/*
+        public void onRemoveCommandClick(ActionEvent event) {
+            String uiType = getComponentAttributeString(ATTRIBUTE_UI_TYPE);
+            if (SIMPLIFIED_UI.equals(uiType)) {
+
+                if (event == null)
+                    return;
+
+                RowKeySet selectedRows = _table.getSelectedRowKeys();
+                if (selectedRows == null)
+                    return;
+
+                List<DimMember> expandedTreeNodes = getDisclosedDimMembers();
+
+                // First create a list in reverse order so highest index
+                //  keys are dealt with first.
+                List<Integer> list = new ArrayList<Integer>();
+                Iterator iter = selectedRows.iterator();
+                while (iter.hasNext()) {
+                    Integer i = (Integer)iter.next();
+                    list.add(0, i);
+                }
+
+                for (Integer i : list) {
+                    DimMember m = _tableRoot.getChildren().get(i);
+                    _tableRoot.getChildren().remove(m);
+
+                    // Add the selected tree nodes(which are being removed from the right side of the shuttle) back to the Tree Model, in case of Fuse Dim Shuttle.
+                   // addSelectedNodeBackToTreeModel(m);
+
+                    // Bug# 18023873:- Instead of calling synchronizeTreeWithTable(), find the reference to the node being removed and invoke the DimMember.unselectAll() method
+                    // to synch the selection state.
+                    DimMember treeNode = findDimMemberInTree(_treeRoot, m);
+                    if (treeNode != null) {
+                        treeNode.unselectAll();
+                    }
+                }
+
+
+                HashMap<DimMember, List> rowKeyLists =
+                    getRowKeyListForDisclosedNodes(expandedTreeNodes);
+                regenerateDisclosedRowKeys(expandedTreeNodes, rowKeyLists);
+                populateDataForExpandedTreeNodes(_tree.getDisclosedRowKeys());
+
+                clearTableSelection();
+                refreshUIFromData(false);
+            } else {
+                if (event == null)
+                    return;
+
+                RowKeySet selectedRows = _table.getSelectedRowKeys();
+                if (selectedRows == null)
+                    return;
+
+                // First create a list in reverse order so highest index
+                //  keys are dealt with first.
+                List<Integer> list = new ArrayList<Integer>();
+                Iterator iter = selectedRows.iterator();
+                while (iter.hasNext()) {
+                    Integer i = (Integer)iter.next();
+                    list.add(0, i);
+                }
+
+                for (Integer i : list) {
+                    DimMember m = _tableRoot.getChildren().get(i);
+                    _tableRoot.getChildren().remove(m);
+
+                    // Bug# 18023873:- Instead of calling synchronizeTreeWithTable(), find the reference to the node being removed and invoke the DimMember.unselectAll() method
+                    // to synch the selection state.
+                    DimMember treeNode = findDimMemberInTree(_treeRoot, m);
+                    if (treeNode != null) {
+                        treeNode.unselectAll();
+                    }
+                }
+
+                clearTableSelection();
+                refreshUIFromData(false);
+            }
+        }*/
+
+    public void onRemoveCommandClick(ActionEvent event) {
+                if (event == null)
+                    return;
+                RowKeySet selectedRows = _table.getSelectedRowKeys();
+                if (selectedRows == null)
+                    return;
+                // First create a list in reverse order so highest index
+                //  keys are dealt with first.
+                List<Integer> list = new ArrayList<Integer>();
+                Iterator iter = selectedRows.iterator();
+                while (iter.hasNext()) {
+                    Integer i = (Integer)iter.next();
+                    list.add(0, i);
+                }
+
+                for (Integer i : list) {
+                    DimMember m = _tableRoot.getChildren().get(i);
+                    _tableRoot.getChildren().remove(m);
+
+                    // Bug# 18023873:- Instead of calling synchronizeTreeWithTable(), find the reference to the node being removed and invoke the DimMember.unselectAll() method
+                    // to synch the selection state.
+                    DimMember treeNode = findDimMemberInTree(_treeRoot, m);
+                    if (treeNode != null) {
+                        treeNode.unselectAll();
+                    }
+                }
+
+                clearTableSelection();
+                refreshUIFromData(false);
+        }
+
+
+        public void onDialogOpen(ActionEvent event)
+        {
+            if (event==null) return;
+
+            // Set flag to true to allow Tree generation and population of the shuttle
+            _shuttleExpanded=true;
+            // Call getTree() to inititalize tree model and tree root
+
+
+            getTree();
+            initializeTableFromTransaction();
+            initializeTreeRoot();
+
+
+
+            // Bug 22062854: initializeTreeRoot() moved to getTree() - Calling only the sync methods here
+
+                // The synchronizeTreeWithTable() method will walk through the Tree and mark all the nodes, which have been shuttled to the right, as Selected.
+                synchronizeTreeWithTable();
+                refreshUIFromData(true);
+
+	    PatternsPublicUtil.invokePopup(_shuttlePopup, null);
+        }
+
+        public void onDialogClose(PopupCanceledEvent event)
+        {
+            if (event==null) return;
+
+          //Bug 22062854:  Set flag to false - shuttle is closed
+          _shuttleExpanded=false;
+
+            //Bug 22062854:  Needed when same shuttle is expanded again next time
+
+            refreshUIFromData(true);
+        }
+
+        public void onCancelClick(ActionEvent event)
+        {
+            if ( event == null ) return;
+
+          //Bug 22062854:  Set flag to false - shuttle is closed
+         // _shuttleExpanded=false;
+            // Clear the Right Side of the Dimension shuttle in case of Fuse.
+            String uiType = getComponentAttributeString(ATTRIBUTE_UI_TYPE);
+            if (SIMPLIFIED_UI.equals(uiType)) {
+                clearTableData();
+                initializeTableFromTransaction();
+            }
+
+            PatternsPublicUtil.hidePopup(_shuttlePopup.getClientId(FacesContext.getCurrentInstance()));
+        }
+
+        public void onOKClick(ActionEvent event)
+        {
+            if ( event == null ) return;
+
+            saveTableDataToTransaction();
+            refreshUIComponent(_formattedOutput);
+            refreshUIComponent(_moreCommandLink);
+            PatternsPublicUtil.hidePopup(_shuttlePopup.getClientId(FacesContext.getCurrentInstance()));
+
+        }
+
+        private Long compareDimMembers(DimMember first, DimMember second) {
+
+            // Return values:
+            //  null = invalid params, error, or no relationship found
+            //   0L  = members are the same
+            //  -1L  = first is a child of second
+            //   1L  = first is parent of second
+
+            if (first == null || second == null)
+                return null;
+
+            if (first.getIntegrationId() != null &&
+                first.getIntegrationId().compareTo(second.getIntegrationId()) ==
+                0) {
+                return 0L;
+            }
+
+
+            // Bug# 18023873:- Do not call the AMImpl.checkDimMemberRelation() method to find the parent-child relationship between two DimMembers.
+            // Moved the core logic written inside the checkDimMemberRelation() method, to be be used here, so that we do not make an expensive VO.executeQuery() call there.
+
+            //            Long check = getApplicationModule().checkDimMemberRelation(
+            //                                                      dimCode, first.getSequenceHigh(),
+            //                                                      first.getSequenceLow(), second.getIntegrationId());
+
+            Long check = null;
+
+            Long sourceHigh = first.getSequenceHigh();
+            Long sourceLow = first.getSequenceLow();
+
+            Long targetHigh = second.getSequenceHigh();
+            Long targetLow = second.getSequenceLow();
+
+            if (sourceHigh == null || sourceLow == null ||
+                targetHigh == null || targetLow == null) {
+                return null;
+            }
+
+            if (targetHigh >= sourceHigh && targetLow <= sourceLow) {
+                check = -1L;
+            } else if (sourceHigh >= targetHigh && sourceLow <= targetLow) {
+                check = 1L;
+            } else {
+                check = 0L;
+            }
+
+            if (check != null && check == 0L)
+                check = null;
+
+            return check;
+        }
+
+        private Long compareMembers(DimMember first, DimMember second) {
+            String dimCode =  getComponentAttributeString(ATTRIBUTE_DIMENSION_CODE);
+            if (PartnerSystemConstant.PARTNER_GEO_DIMENSION_CODE.equals(dimCode)) {
+                return compareGeographies(first, second);
+
+            } else {
+                return compareDimMembers(first, second);
+            }
+
+        }
+
+        private Long compareGeographies(DimMember first, DimMember second) {
+            // Return values:
+            //  null = invalid params, error, or no relationship found
+            //   0L  = members are the same
+            //  -1L  = first is a child of second
+            //   1L  = first is parent of second
+
+            if (first == null || second == null)
+                return null;
+
+            if (first.getIntegrationId() != null &&
+                first.getIntegrationId().compareTo(second.getIntegrationId()) ==
+                0) {
+                return 0L;
+            }
+
+            //if parent of first is same as geoid os second
+            //meaning second is immediate parent of First
+            if (first.getGeoParentId() != null &&
+                first.getGeoParentId().equals(second.getGeographyId())) {
+                return -1L;
+            } else if (second.getGeoParentId() != null &&
+                       second.getGeoParentId().equals(first.getGeographyId())) {
+                //meaning first  is immediate parent of second
+                return 1L;
+            }
+
+
+            //check for heirarchial Parents and child relationship
+            Long check = null;
+            // this return  rowcount if second is parent of first
+            Boolean isSecondParentOfFirst =
+                getApplicationModule().isSecondParentOfFirst(first.getGeographyId(),
+                                                                      second.getGeographyId());
+
+            //return a row count if first is parent of second
+           Boolean isFirstParentOfSecond =
+                getApplicationModule().isSecondParentOfFirst(second.getGeographyId(),
+                                                                      first.getGeographyId());
+
+
+            if (isSecondParentOfFirst ==true && isFirstParentOfSecond == false) {
+                check = -1L;
+            } else if (isFirstParentOfSecond == true &&
+                       isSecondParentOfFirst ==false) {
+                check = 1L;
+            } else {
+                check = 0L;
+            }
+
+            if (check != null && check == 0L)
+                check = null;
+
+            return check;
+        }
+
+	/* This method is used to determine, if a dimension member is a child of another.
+	 * It is useful, to hide a dimension member from the tree model of the fuse dimension shuttle,
+	 * if its parent is already present in the RHS (Selected) side of the dimension shuttle.
+	 * Parameters:
+ 	 * child  - 1st dimension member
+ 	 * parent - 2nd dimension member
+	 * O/P - returns true, if the 1st dimension member is a child of the second dimension member.
+	 */
+        private boolean isDimMemberChildOf(DimMember child, DimMember parent) {
+            boolean result = false;
+            if (child == null || parent == null) {
+                result = false;
+            } else {
+
+                Long comparison = compareMembers(child, parent);
+                if (comparison != null) {
+                    if (comparison == -1L) {
+                        // A valid parent child relationship exists between the Child and Parent Dimension members.
+                        result = true;
+                    }
+                }
+            }
+            return result;
+        }
+
+        private void resolveAddedMember(DimMember added)
+        {
+            if ( added == null || _tableRoot == null ) return;
+
+            added.setSelected(false);
+            added.setChildSelected(false);
+            added.setParentSelected(false);
+
+            ListIterator<DimMember> iter = _tableRoot.getChildren().listIterator();
+            while ( iter.hasNext() )
+            {
+                DimMember row = iter.next();
+
+                Long comparison = compareMembers( added, row );
+                if ( comparison != null )
+                {
+                    if ( comparison == 0L )
+                    {
+                        added.setSelected(true);
+                        break;
+                    }
+                    else if ( comparison == -1L )
+                    {
+                        added.setParentSelected(true);
+                        break;
+                    }
+                    else if ( comparison == 1L )
+                    {
+                        added.setChildSelected(true);
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void moveMemberAndValidate(DimMember moving)
+        {
+            if ( moving == null || _tableRoot == null ) return;
+
+            Boolean okToMove = true;
+            ListIterator<DimMember> iterList = _tableRoot.getChildren().listIterator();
+            while ( iterList.hasNext() )
+            {
+                DimMember row = iterList.next();
+                    if (moving != null && row != null)
+                    if (moving.getIntegrationId() != null &&
+                        moving.getIntegrationId().compareTo(row.getIntegrationId()) == 0) {
+                        okToMove = false;
+                        break;
+                    }
+
+
+                /* Commented out the code to improve the performance as per the bug #31066971
+                 * Long comparison = compareMembers( moving, row );
+                if ( comparison != null )
+                {
+                    if ( comparison == 0L )
+                    {
+                        okToMove = false;
+                        break;
+                    }
+                    else if ( comparison == -1L )
+                    {
+                        okToMove = false;
+                        break;
+                    }
+                    else if ( comparison == 1L )
+                    {
+                        //iterList.remove();
+                        // do not break here, more than one selection might be removed
+                    }
+                } */
+            }
+
+            if (okToMove == true) {
+                _tableRoot.getChildren().add(moving);
+                /* Commented out the code to improve the performance as per the bug #31066971
+                String uiType = getComponentAttributeString(ATTRIBUTE_UI_TYPE);
+                if (SIMPLIFIED_UI.equals(uiType)) {
+                    // Remove the selected nodes (which are being added to the right side of the shuttle) from the tree model on the left side,
+                    // in case of fuse dim shuttle.
+                     // Commented out the code to improve the performance as per the bug #31066971
+                     // removeSelectedNodeFromTreeModel(moving);
+                }else{
+                    // synchronize the selection state for this particular DimMember and not for the entire tree.
+                    markDimMemberAsSelected(moving);
+                } */
+            }
+        }
+
+        private void regenerateDisclosedRowKeys(List<DimMember> expandedTreeNodes, HashMap<DimMember, List> rowKeyLists){
+
+            _tree.getDisclosedRowKeys().clear();
+
+            if (expandedTreeNodes != null){
+                if (expandedTreeNodes.size() > 0){
+
+                    for (DimMember m : expandedTreeNodes){
+                        List rowKeyList = rowKeyLists.get(m);
+                        _tree.getDisclosedRowKeys().add(rowKeyList);
+                    }
+                }
+            }
+        }
+
+
+        private void markDimMemberAsSelected(DimMember node) {
+            if (node == null)
+                return;
+
+            node.setSelected(true);
+            ListIterator<DimMember> iter = node.getChildren().listIterator();
+            while (iter.hasNext()) {
+                DimMember child = iter.next();
+                setDimMembersParentAsSelected(child);
+            }
+
+        }
+
+        private void synchronizeTreeWithTable()
+        {
+            if ( _treeRoot == null || _tableRoot == null ) return;
+
+            // Synchronize selected status in tree with table rows.
+            _treeRoot.unselectAll();
+            for ( DimMember m : _tableRoot.getChildren() )
+            {
+		// find the handle to the DimMember from the _treeRoot and synchronize the selection state.
+                DimMember treeNode = findDimMemberInTree(_treeRoot, m);
+                if (treeNode != null){
+                    markDimMemberAsSelected(treeNode);
+                }
+            }
+        }
+
+        private void resolveSelectedMemberWithNode(DimMember selected, DimMember node)
+        {
+            if ( selected == null || node == null ) return;
+
+            if ( node.getSelected() == false
+                 && node.getParentSelected() == false
+                 && node.getChildSelected() == false )
+            {
+                Long comparison = compareMembers( node, selected );
+                if ( comparison != null )
+                {
+                    if ( comparison == 0L )
+                    {
+                        node.setSelected(true);
+                    }
+                    else if ( comparison == -1L )
+                    {
+                        node.setParentSelected(true);
+                    }
+                    else if ( comparison == 1L )
+                    {
+                        node.setChildSelected(true);
+                    }
+                }
+            }
+
+            ListIterator<DimMember> iter = node.getChildren().listIterator();
+            while ( iter.hasNext() )
+            {
+                DimMember child = iter.next();
+                if ( node.getSelected() == true || node.getParentSelected() == true )
+                {
+                    child.setParentSelected(true);
+                }
+
+                resolveSelectedMemberWithNode(selected, child);
+            }
+        }
+
+        private void clearTableSelection()
+        {
+            if ( _table == null ) return;
+
+            RowKeySet rks = _table.getSelectedRowKeys();
+            if ( rks != null ) rks.clear();
+            _table.setSelectedRowKeys(rks);
+        }
+
+        private void clearTreeSelection()
+        {
+            if ( _tree == null ) return;
+
+            RowKeySet rks = _tree.getSelectedRowKeys();
+            if ( rks != null ) rks.clear();
+            _tree.setSelectedRowKeys(rks);
+        }
+
+        private void clearTreeExpansion()
+        {
+            if ( _tree == null ) return;
+
+            RowKeySet rks = _tree.getDisclosedRowKeys();
+            if ( rks != null ) rks.clear();
+            _tree.setDisclosedRowKeys(rks);
+        }
+
+        private void refreshUIFromData(Boolean includeOutputText)
+        {
+            //refreshUIComponent(_tree);
+            refreshUIComponent(_moveImageLink);
+            refreshUIComponent(_moveAllImageLink);
+            refreshUIComponent(_moveButton);
+            refreshUIComponent(_moveAllButton);
+            refreshUIComponent(_table);
+            refreshUIComponent(_removeImageLink);
+            refreshUIComponent(_removeAllImageLink);
+            refreshUIComponent(_removeButton);
+            refreshUIComponent(_removeAllButton);
+            refreshUIComponent(_clearSearchButton);
+            refreshUIComponent(_searchOutput);
+            if ( includeOutputText == true )
+            {
+                refreshUIComponent(_formattedOutput);
+                refreshUIComponent(_moreCommandLink);
+            }
+        }
+
+        private void refreshUIComponent(UIComponent comp)
+        {
+            if ( comp != null )
+            {
+                AdfFacesContext.getCurrentInstance().addPartialTarget( comp );
+            }
+        }
+
+        private void initializeTreeRoot()
+        {
+            clearTreeSelection();
+            clearTreeExpansion();
+
+            _treeRoot = new DimMember();
+	    // Bug 18023873:- Do not fetch grand children here.
+            populateTreeChildren( _treeRoot, false );
+            if (_treeRoot.getChildren().size() == 1) {
+                // Skip the topmost level if it's single.
+                DimMember topLevelParent = _treeRoot.getChildren().get(0);
+                // Bug 18023873:- Do not fetch grand children here.
+                populateTreeChildren(topLevelParent, false);
+
+                // Mark the 1st node as automatically expanded.
+                if (_tree != null) {
+                    if (_tree.getDisclosedRowKeys() != null) {
+                        _tree.getDisclosedRowKeys().clear();
+                        List<Integer> rowKeyList = new ArrayList<Integer>();
+                        rowKeyList.add(0);
+                        _tree.getDisclosedRowKeys().add(rowKeyList);
+                    }
+                }
+
+            }
+        }
+
+	// Bug 18023873:- This method will insert a dummy child for a DimMember.
+	// If a DimMember is not a leaf node, then the only way to convey to the TreeModel, this fact, is by fetching and populating its actual children.
+	// As fetching the children is unnecessary, unless the node is expanded by the user, we will populate a dummy child, for every non-leaf node and
+	// then later remove it and fetch the actual chidren, when the user actually discloses the tree node, to view its children.
+
+        private void populateDummyChildNodeIfNeeded(DimMember node){
+            if (node.getNonLeafNode() == true){
+                 DimMember m = new DimMember();
+                 m.setName("dummy");
+                 node.getChildren().add(m);
+                 }
+        }
+
+        private void removeDummyChildNodeIfPresent(DimMember node){
+                DimMember m = new DimMember();
+                m.setName("dummy");
+                if (node.getChildren().contains(m)){
+                        node.getChildren().remove(m);
+                }
+        }
+
+
+        private void populateTreeChildren(DimMember parent,
+                                          Boolean includeGrandchildren) {
+            String uiType = getComponentAttributeString(ATTRIBUTE_UI_TYPE);
+            if (SIMPLIFIED_UI.equals(uiType)) {
+
+                if (parent == null)
+                    return;
+
+
+
+                if (parent.getChildrenPopulated() == false) {
+                    _treeModelChanged = true;
+
+
+
+                    List<Row> members =
+                        getApplicationModule().getDimMemberChildren(getComponentAttributeString(ATTRIBUTE_DIMENSION_CODE),
+                                                                    parent.getMemberId());
+
+                    // remove the dummy child node, as we are going to populate the real children below.
+                    removeDummyChildNodeIfPresent(parent);
+
+                    if (members != null) {
+                        Iterator<Row> iter = members.iterator();
+                        while (iter.hasNext()) {
+                            Row r = iter.next();
+                            if (r != null) {
+                                DimMember m = new DimMember(r);
+
+//                                if(getComponentAttributeString(ATTRIBUTE_DIMENSION_CODE).equalsIgnoreCase("Geo")){
+//                                     Boolean flag=(Boolean)getApplicationModule().hasDimMemberChildren(getComponentAttributeString(ATTRIBUTE_DIMENSION_CODE),
+//                                                                    m.getGeographyId());
+//
+//                                        m.setNonLeafNode(flag);
+//
+//                                    }
+                                /* Commented out the code to improve the performance as per the bug #31066971
+
+                                // Do not create Tree Nodes for dimension members, which are already present in the right side ('Selected') of the shuttle.
+                                if (_tableRoot.getChildren().contains(m)) {
+                                    continue;
+                                }
+
+                                // Do not create Tree Nodes for dimension members, whose parents are already present in the right side ('Selected') of the shuttle.
+                                boolean parentOfDimMemberAlreadyExistsInSelectedDimMemberList = false;
+                                for (DimMember selectedDimMember : _tableRoot.getChildren()){
+                                   boolean result = isDimMemberChildOf(m, selectedDimMember);
+                                    if (result == true){
+                                        parentOfDimMemberAlreadyExistsInSelectedDimMemberList = true;
+                                        break;
+                                    }
+                                }
+
+                                if (parentOfDimMemberAlreadyExistsInSelectedDimMemberList){
+                                    continue;
+                                }*/
+
+                                parent.getChildren().add(m);
+                                populateDummyChildNodeIfNeeded(m);
+                            }
+                        }
+                    }
+
+                    parent.setChildrenPopulated(true);
+                }
+
+                if (includeGrandchildren == true) {
+                    for (DimMember m : parent.getChildren()) {
+                        populateTreeChildren(m, false);
+                    }
+                }
+            } else {
+                if (parent == null)
+                    return;
+
+
+
+                if (parent.getChildrenPopulated() == false) {
+                    _treeModelChanged = true;
+
+                    List<Row> members =
+                        getApplicationModule().getDimMemberChildren(getComponentAttributeString(ATTRIBUTE_DIMENSION_CODE),
+                                                                    parent.getMemberId());
+
+                    // remove the dummy child node, as we are going to populate the real children below.
+                    removeDummyChildNodeIfPresent(parent);
+
+                    if (members != null) {
+                        Iterator<Row> iter = members.iterator();
+                        while (iter.hasNext()) {
+                            Row r = iter.next();
+                            if (r != null) {
+                                DimMember m = new DimMember(r);
+                                //Commented out the code to improve the performance as per the bug #31066971
+//                                if(getComponentAttributeString(ATTRIBUTE_DIMENSION_CODE).equalsIgnoreCase("Geo")){
+//                                     Boolean flag=(Boolean) getApplicationModule().hasDimMemberChildren(getComponentAttributeString(ATTRIBUTE_DIMENSION_CODE),
+//                                                                    m.getGeographyId());
+//                                        m.setNonLeafNode(flag);
+//
+//                                    }
+                                parent.getChildren().add(m);
+                                populateDummyChildNodeIfNeeded(m);
+                                if (parent.getSelected() ||
+                                    parent.getParentSelected()) {
+                                    m.setParentSelected(true);
+                                } else {
+                                    resolveAddedMember(m);
+                                }
+                            }
+                        }
+                    }
+
+                    parent.setChildrenPopulated(true);
+                }
+
+                if (includeGrandchildren == true) {
+                    for (DimMember m : parent.getChildren()) {
+                        populateTreeChildren(m, false);
+                    }
+                }
+            }
+        }
+
+        private void initializeTableFromTransaction()
+        {
+            //Bug 22062854:  Not needed since initialize is only called on click
+            //clearTableSelection();
+            _tableRoot = new DimMember();
+
+            if ( _treeRoot != null ) _treeRoot.unselectAll();
+
+            List<Row> members = getApplicationModule().getPartnerDimMembers(
+                                    getComponentAttributeString(ATTRIBUTE_DIMENSION_CODE),
+                                    getComponentAttributeLong(ATTRIBUTE_OWNER_ID),
+                                    getComponentAttributeString(ATTRIBUTE_OWNER_TYPE) );
+            if ( members != null )
+            {
+                Iterator<Row> iter = members.iterator();
+                while ( iter.hasNext() )
+                {
+                    Row r = iter.next();
+                    if ( r != null )
+                    {
+                        DimMember m = new DimMember(r);
+                        _tableRoot.getChildren().add(m);
+                    }
+                }
+            }
+
+
+        }
+
+        /* This method, will be invoked from the Fuse Dimension Shuttle, when the user clicks on Cancel.
+         * This will remove all entries from the Right side of the shuttle.
+         */
+        private void clearTableData(){
+            clearTableSelection();
+
+            // Remove all the entries added to the 'Selected' side.
+            if (_tableRoot != null){
+                _tableRoot.getChildren().clear();
+            }
+        }
+
+        private void saveTableDataToTransaction()
+        {
+            List<DimMember> copyOfSelected = new ArrayList<DimMember>();
+            for ( DimMember m : _tableRoot.getChildren() )
+            {
+                copyOfSelected.add(m);
+            }
+
+            String dimCode = getComponentAttributeString(ATTRIBUTE_DIMENSION_CODE);
+            Long ownerId = getComponentAttributeLong(ATTRIBUTE_OWNER_ID);
+            String ownerType = getComponentAttributeString(ATTRIBUTE_OWNER_TYPE);
+
+            List<Row> members = getApplicationModule().getPartnerDimMembers( dimCode, ownerId, ownerType );
+            if ( members != null )
+            {
+                Iterator<Row> iter = members.iterator();
+                while ( iter.hasNext() )
+                {
+                    Row r = iter.next();
+                    if ( r != null )
+                    {
+                        String integrationId = (String) r.getAttribute(COLUMN_INTEGRATION_ID);
+
+                        DimMember found = null;
+                        for ( DimMember m : copyOfSelected )
+                        {
+                            if ( integrationId != null && integrationId.equals(m.getIntegrationId()) )
+                            {
+                                found = m;
+                                break;
+                            }
+                        }
+
+                        if ( found == null )
+                        {
+                            Long removeId = (Long)r.getAttribute(COLUMN_PARTNER_DIM_MEMBERS_ID);
+                            getApplicationModule().removePartnerDimMember(dimCode, ownerId, ownerType, removeId);
+                        }
+                        else
+                        {
+                            copyOfSelected.remove(found);
+                        }
+                    }
+                }
+            }
+
+            // Any remaining members were added.
+            for ( DimMember m : copyOfSelected )
+            {
+                getApplicationModule().insertPartnerDimMember(
+                                        dimCode, ownerId, ownerType,
+                                        m.getIntegrationId(), m.getName(),
+                                        m.getAttributePk1(), m.getAttributePk2(),
+                                        m.getDimSubtypeCode());
+            }
+        }
+
+/* This method will return a handle to the Parent Node of a Dimension Member in the Tree.
+ * Input parameters are:
+ * _treeRoot - a handle to the root dimension member.
+ * m - the dimension member, for which we are trying to find the parent.
+ * output: the parent dimension member node in the tree.
+ */
+        public DimMember findDimMembersParentInTree(DimMember _treeRoot,
+                                                    DimMember m) {
+
+            if (_treeRoot != null || m != null) {
+
+                if (_treeRoot.equals(m)) {
+                // check if the tree root is the element, which we are looking for
+                   return _treeRoot;
+                } else {
+                    List<DimMember> childNodes = _treeRoot.getChildren();
+
+                    if (childNodes != null && childNodes.size() > 0) {
+                        Iterator<DimMember> childItr1 = childNodes.iterator();
+                        // if children exist, check if any of the child elements, match with the one, we are looking for
+                        while (childItr1.hasNext()) {
+                            DimMember childNode = childItr1.next();
+                            if (m.equals(childNode)) {
+                                return _treeRoot;
+                            }
+                        }
+
+                        // call the find() process recursively, for each child node of the current node
+                        Iterator<DimMember> childItr2 = childNodes.iterator();
+                        while (childItr2.hasNext()) {
+                            DimMember childNode = childItr2.next();
+
+                            DimMember wantedParentNode = findDimMembersParentInTree(childNode, m);
+                            if (wantedParentNode != null){
+                                return wantedParentNode;
+                            }
+                        }
+
+                    }
+                }
+
+            }
+            return null;
+        }
+
+        public DimMember findDimMemberInTree(DimMember _treeRoot,
+                                             DimMember m) {
+
+            if (_treeRoot != null || m != null) {
+
+                if (_treeRoot.equals(m)) {
+                // check if the tree root is the element, which we are looking for
+                    return _treeRoot;
+                } else {
+                    List<DimMember> childNodes = _treeRoot.getChildren();
+
+                    if (childNodes != null && childNodes.size() > 0) {
+                        Iterator<DimMember> childItr1 = childNodes.iterator();
+                        // if children exist, check if any of the child elements, match with the one, we are looking for
+                        while (childItr1.hasNext()) {
+                            DimMember childNode = childItr1.next();
+                            if (m.equals(childNode)) {
+                                return childNode;
+                            }
+                        }
+
+                        // call the find() process recursively, for each child node of the current node
+                        Iterator<DimMember> childItr2 = childNodes.iterator();
+                        while (childItr2.hasNext()) {
+                            DimMember childNode = childItr2.next();
+
+                            DimMember wantedNode = findDimMemberInTree(childNode, m);
+                            if (wantedNode != null){
+                                return wantedNode;
+                            }
+                        }
+
+                    }
+                }
+
+            }
+            return null;
+        }
+        // START: Bug 19687282: MVG
+        private RichCommandLink getMoreCommandLink() {
+            return _moreCommandLink;
+        }
+
+        private void setMoreCommandLink(RichCommandLink moreCommandLink) {
+            _moreCommandLink = moreCommandLink;
+        }
+        //END Bug: 19687282
+    }
+}
+
